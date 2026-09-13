@@ -21,7 +21,7 @@ export class InMemoryFilmsRepository implements IFilmsRepository {
         {
           id: 'f2e429b0-685d-41f8-a8cd-1d8cb63b99ce',
           daytime: '2024-06-28T10:00:53+03:00',
-          hall: 0,
+          hall: '0',
           rows: 5,
           seats: 10,
           price: 350,

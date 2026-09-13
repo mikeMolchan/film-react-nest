@@ -10,7 +10,7 @@ export class ScheduleItem {
   daytime: string;
 
   @Prop({ required: true })
-  hall: number;
+  hall: string;
 
   @Prop({ required: true })
   rows: number;

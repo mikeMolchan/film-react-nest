@@ -19,7 +19,7 @@ export function scheduleDocumentToDto(item: ScheduleItem): ScheduleDto {
   return {
     id: item.id,
     daytime: item.daytime,
-    hall: item.hall,
+    hall: String(item.hall),
     rows: item.rows,
     seats: item.seats,
     price: item.price,
