@@ -3,28 +3,37 @@ import {
   ArrayMinSize,
   IsArray,
   IsEmail,
+  IsInt,
+  IsNotEmpty,
   IsNumber,
   IsString,
+  Min,
   ValidateNested,
 } from 'class-validator';
 
 export class TicketDto {
   @IsString()
+  @IsNotEmpty()
   film: string;
 
   @IsString()
+  @IsNotEmpty()
   session: string;
 
   @IsString()
+  @IsNotEmpty()
   daytime: string;
 
-  @IsNumber()
+  @IsInt()
+  @Min(1)
   row: number;
 
-  @IsNumber()
+  @IsInt()
+  @Min(1)
   seat: number;
 
   @IsNumber()
+  @Min(0)
   price: number;
 }
 
@@ -33,6 +42,7 @@ export class CreateOrderDto {
   email: string;
 
   @IsString()
+  @IsNotEmpty()
   phone: string;
 
   @IsArray()
