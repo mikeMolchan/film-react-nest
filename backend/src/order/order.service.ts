@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -21,8 +22,6 @@ export class OrderService {
   async create(createOrderDto: CreateOrderDto) {
     const { tickets } = createOrderDto;
 
-    // группируем билеты по конкретному сеансу — на один сеанс может
-    // приходиться несколько билетов (мест) в одном заказе
     const groups = new Map<string, TicketDto[]>();
     for (const ticket of tickets) {
       const key = `${ticket.film}:${ticket.session}`;
@@ -31,8 +30,6 @@ export class OrderService {
       groups.set(key, group);
     }
 
-    // сначала проверяем ВСЕ группы и готовим обновления,
-    // и только если ни одного конфликта нет — применяем их
     const updates: { film: string; session: string; taken: string[] }[] = [];
 
     for (const [, group] of groups) {
@@ -51,6 +48,12 @@ export class OrderService {
       const takenSeats = new Set(schedule.taken);
 
       for (const ticket of group) {
+        if (ticket.row > schedule.rows || ticket.seat > schedule.seats) {
+          throw new BadRequestException(
+            `Место ${ticket.row}:${ticket.seat} находится за пределами зала (максимум ${schedule.rows} рядов, ${schedule.seats} мест)`,
+          );
+        }
+
         const seatKey = `${ticket.row}:${ticket.seat}`;
         if (takenSeats.has(seatKey)) {
           throw new ConflictException(
