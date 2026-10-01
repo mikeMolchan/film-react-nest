@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'node:path';
 
 import { configProvider } from './app.config.provider';
@@ -10,6 +10,8 @@ import { FilmsController } from './films/films.controller';
 import { FilmsService } from './films/films.service';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
+import { Film } from './repository/entities/film.entity';
+import { Schedule } from './repository/entities/schedule.entity';
 
 @Module({
   imports: [
@@ -17,13 +19,17 @@ import { OrderService } from './order/order.service';
       isGlobal: true,
       cache: true,
     }),
-    MongooseModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>(
-          'DATABASE_URL',
-          'mongodb://127.0.0.1:27017/practicum',
-        ),
+        type: configService.get<'postgres'>('DATABASE_DRIVER', 'postgres'),
+        host: configService.get<string>('DATABASE_HOST', 'localhost'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
+        database: configService.get<string>('DATABASE_NAME', 'prac'),
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        entities: [Film, Schedule],
+        synchronize: false,
       }),
     }),
     ServeStaticModule.forRoot({
