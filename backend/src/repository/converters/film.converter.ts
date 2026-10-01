@@ -2,20 +2,12 @@ import { Film } from '../entities/film.entity';
 import { Schedule } from '../entities/schedule.entity';
 import { FilmDto, ScheduleDto } from '../../films/dto/films.dto';
 
-function parseList(value: string): string[] {
-  return value ? value.split(',') : [];
-}
-
-export function stringifyList(value: string[]): string {
-  return value.join(',');
-}
-
 export function filmEntityToDto(film: Film): FilmDto {
   return {
     id: film.id,
     rating: film.rating,
     director: film.director,
-    tags: parseList(film.tags),
+    tags: film.tags,
     title: film.title,
     about: film.about,
     description: film.description,
@@ -32,6 +24,6 @@ export function scheduleEntityToDto(schedule: Schedule): ScheduleDto {
     rows: schedule.rows,
     seats: schedule.seats,
     price: schedule.price,
-    taken: parseList(schedule.taken),
+    taken: schedule.taken,
   };
 }

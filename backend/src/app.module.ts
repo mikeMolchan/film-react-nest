@@ -21,25 +21,16 @@ import { Schedule } from './repository/entities/schedule.entity';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const databaseUrl = new URL(
-          configService.get<string>(
-            'DATABASE_URL',
-            'postgres://localhost:5432/prac',
-          ),
-        );
-
-        return {
-          type: 'postgres' as const,
-          host: databaseUrl.hostname,
-          port: Number(databaseUrl.port) || 5432,
-          database: databaseUrl.pathname.replace(/^\//, ''),
-          username: configService.get<string>('DATABASE_USERNAME'),
-          password: configService.get<string>('DATABASE_PASSWORD'),
-          entities: [Film, Schedule],
-          synchronize: false,
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        type: configService.get<'postgres'>('DATABASE_DRIVER', 'postgres'),
+        host: configService.get<string>('DATABASE_HOST', 'localhost'),
+        port: configService.get<number>('DATABASE_PORT', 5432),
+        database: configService.get<string>('DATABASE_NAME', 'prac'),
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        entities: [Film, Schedule],
+        synchronize: false,
+      }),
     }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),

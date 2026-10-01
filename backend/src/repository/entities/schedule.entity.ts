@@ -27,8 +27,14 @@ export class Schedule {
   @Column()
   seats: number;
 
-  @Column()
-  taken: string;
+  @Column({
+    type: 'text',
+    transformer: {
+      to: (value: string[]) => (value ?? []).join(','),
+      from: (value: string) => (value ? value.split(',') : []),
+    },
+  })
+  taken: string[];
 
   @ManyToOne(() => Film, (film) => film.schedules)
   @JoinColumn({ name: 'filmId' })

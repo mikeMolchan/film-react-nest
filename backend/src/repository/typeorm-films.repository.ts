@@ -8,7 +8,6 @@ import { FilmDto, ScheduleDto } from '../films/dto/films.dto';
 import {
   filmEntityToDto,
   scheduleEntityToDto,
-  stringifyList,
 } from './converters/film.converter';
 
 @Injectable()
@@ -49,7 +48,7 @@ export class TypeOrmFilmsRepository implements IFilmsRepository {
   ): Promise<void> {
     await this.scheduleRepository.update(
       { id: sessionId, film: { id: filmId } },
-      { taken: stringifyList(taken) },
+      { taken },
     );
   }
 }

@@ -12,8 +12,14 @@ export class Film {
   @Column()
   director: string;
 
-  @Column()
-  tags: string;
+  @Column({
+    type: 'text',
+    transformer: {
+      to: (value: string[]) => (value ?? []).join(','),
+      from: (value: string) => (value ? value.split(',') : []),
+    },
+  })
+  tags: string[];
 
   @Column()
   image: string;
