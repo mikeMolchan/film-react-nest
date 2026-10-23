@@ -23,7 +23,9 @@ describe('TskvLogger', () => {
     it('склеивает несколько дополнительных параметров через запятую', () => {
       const result = logger.formatMessage('error', 'Ошибка', 'stack', 'App');
 
-      expect(result).toBe('level=error\tmessage=Ошибка\toptionalParams=stack,App');
+      expect(result).toBe(
+        'level=error\tmessage=Ошибка\toptionalParams=stack,App',
+      );
     });
 
     it('оставляет optionalParams пустым, если параметров нет', () => {
@@ -53,7 +55,11 @@ describe('TskvLogger', () => {
 
   describe('экранирование спецсимволов', () => {
     it('экранирует перенос строки внутри значения', () => {
-      const result = logger.formatMessage('error', 'Ошибка', 'строка1\nстрока2');
+      const result = logger.formatMessage(
+        'error',
+        'Ошибка',
+        'строка1\nстрока2',
+      );
 
       expect(result).not.toContain('\n');
       expect(result).toContain('optionalParams=строка1\\nстрока2');
