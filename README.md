@@ -35,3 +35,4 @@ MongoDB должна быть установлена и запущена.
 ## Ссылка на приложение
 
 http://85.143.221.202
+http://films-mike.nomorepartiessite.ru
