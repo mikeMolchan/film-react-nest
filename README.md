@@ -31,3 +31,8 @@ MongoDB должна быть установлена и запущена.
 `npm run start:debug`
 
 Для проверки отправьте тестовый запрос с помощью Postman или `curl`.
+
+## Ссылка на приложение
+
+http://85.143.221.202
+http://films-mike.nomorepartiessite.ru
